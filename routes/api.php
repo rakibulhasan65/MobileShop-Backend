@@ -1,10 +1,11 @@
 <?php
 
-use App\Http\Controllers\Api\V1\FrontendApiController;
-use App\Http\Controllers\Api\V1\CustomerApiController;
-use App\Http\Controllers\Api\V1\LoginController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Api\V1\LoginController;
+use App\Http\Controllers\SslCommerzPaymentController;
+use App\Http\Controllers\Api\V1\CustomerApiController;
+use App\Http\Controllers\Api\V1\FrontendApiController;
 
 /*
 |--------------------------------------------------------------------------
@@ -24,7 +25,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 
 Route::prefix('v1')->group(function () {
- 
+
     Route::post('/user/register',[LoginController::class,'register']);
     Route::post('/user/login',[LoginController::class,'login']);
     Route::post('/user/logout',[LoginController::class,'logout']);
@@ -40,17 +41,25 @@ Route::prefix('v1')->group(function () {
     Route::get('/products',[FrontendApiController::class,'products']);
     Route::get('/product/{slug}',[FrontendApiController::class,'productSingle']);
 
+    Route::post('/check/coupon',[FrontendApiController::class,'couponCheck']);
+
     Route::post('/subscription',[FrontendApiController::class,'subscription']);
     Route::get('/blogs',[FrontendApiController::class,'blogs']);
     Route::get('/blog/{slug}',[FrontendApiController::class,'singleBlog']);
     Route::get('/blog/categories',[FrontendApiController::class,'blogCategories']);
     Route::get('/blog/category/{slug}',[FrontendApiController::class,'categoryWiseBlog']);
+
+
+    //
+
+
 });
 
 
+
 Route::prefix('v1')->middleware('auth:sanctum')->group(function () {
- 
-    
+
+
     Route::post('/user/logout',[LoginController::class,'logout']);
     Route::get('/auth/user',[LoginController::class,'userInfo']);
     Route::post('/auth/logout',[LoginController::class,'logout']);
@@ -58,9 +67,15 @@ Route::prefix('v1')->middleware('auth:sanctum')->group(function () {
     Route::get('/auth/profile/details',[LoginController::class,'profileDetails']);
     Route::post('/auth/profile/update',[LoginController::class,'profileUpdate']);
 
-
-    Route::post('/check/coupon',[CustomerApiController::class,'couponCheck']);
+    Route::post('/customer/wishlist/add',[CustomerApiController::class,'storeWishlist']);
+    Route::get('/customer/wishlist',[CustomerApiController::class,'getUserWishlist']);
     Route::get('/orders',[CustomerApiController::class,'orders']);
     Route::post('/order/store',[CustomerApiController::class,'orderStore']);
     Route::get('/order/details/{order}',[CustomerApiController::class,'orderDetails']);
+
+    Route::post('/customer/review/rating/add',[CustomerApiController::class,'reviewRatingStore']);
+
+
+
+
 });

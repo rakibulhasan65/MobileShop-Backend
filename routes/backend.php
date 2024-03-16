@@ -2,19 +2,18 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Backend\BlogController;
-use App\Http\Controllers\Backend\BlogTagController;
+use App\Http\Controllers\Backend\ChatController;
 use App\Http\Controllers\Backend\RoleController;
 use App\Http\Controllers\Backend\UserController;
 use App\Http\Controllers\Backend\BackupController;
-use App\Http\Controllers\Backend\ChatController;
 use App\Http\Controllers\Backend\ModuleController;
+use App\Http\Controllers\Backend\BlogTagController;
 use App\Http\Controllers\Backend\ProfileController;
 use App\Http\Controllers\Backend\SettingController;
 use App\Http\Controllers\Backend\DashboardController;
 use App\Http\Controllers\Backend\PermissionController;
-use \App\Http\Controllers\Backend\ProductsController;
-use \App\Http\Controllers\Backend\CategoryController;
-
+use App\Http\Controllers\Backend\PosController;
+use App\Http\Controllers\Backend\SubscriptionController;
 
 Route::get('dashboard',[DashboardController::class,'index'])->name('dashboard');
 
@@ -23,8 +22,8 @@ Route::post('logoupdate', [SettingController::class, 'sitelogo'])->name('logoupd
 
 //   Roles && Users
 
-   Route::resource('roles',RoleController::class);
-   Route::resource('users',UserController::class);
+Route::resource('roles',RoleController::class);
+Route::resource('users',UserController::class);
 
 // Module Management
 
@@ -52,8 +51,10 @@ Route::delete('backups', [BackupController::class, 'clean'])->name('backups.clea
 Route::get('chat',[ChatController::class,'index'])->name('chat');
 Route::resource('blogtags',BlogTagController::class);
 Route::resource('blogs',BlogController::class);
-Route::post('blogs/destroy/multiple/{id}',[BlogController::class,'multipleDestroy']);
+Route::resource('subscriptions',SubscriptionController::class);
 
+Route::get('pos',[PosController::class,'create'])->name('pos.create');
+Route::post('pos/store',[PosController::class,'checkOut'])->name('inhouse.pos.store');
 
 
 

@@ -1054,10 +1054,10 @@
                                                 <!--begin:Menu item-->
                                                 <div class="menu-item">
                                                     <!--begin:Menu link-->
-                                                    <a class="menu-link" href="apps/ecommerce/sales/add-order.html">
-																<span class="menu-bullet">
-																	<span class="bullet bullet-dot"></span>
-																</span>
+                                                    <a class="menu-link active" href="{{ route('admin.pos.create') }}">
+                                                            <span class="menu-bullet">
+                                                                <span class="bullet bullet-dot"></span>
+                                                            </span>
                                                         <span class="menu-title">Add Order</span>
                                                     </a>
                                                     <!--end:Menu link-->
