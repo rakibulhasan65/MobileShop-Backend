@@ -66,212 +66,204 @@
                     <div class="row">
                         <div class="col-8" style="height: 400px;">
                             <div>
-                                <input type="search" placeholder="search product" wire:model.live="search"> 
+                               <input class="form-control" type="search" placeholder="search product" wire:model.live="search">
 
                             </div>
                             <div class="row">
                                 @foreach ($products as $product)
-                                    
-                               
                                 <div class="col-md-3">
-                                    <div class="card" wire:click="addCart({{ $product->id }})">
-                                        <img src="{{ asset('images/backend') }}/{{ $product->product_image }}" class="card-img-top" height="70" width="50">
-                                        <div class="card-body">
-                                          <h5 class="card-title"><b>{{ $product->product_name }}</b></h5>
+                                    <div class="card card-flush flex-row-fluid p-6 mw-100 my-2" wire:click="addCart({{ $product->id }})">
+
+                                        <div class="card-body text-center">
+{{--                                            <img src="{{ asset('images/backend') }}/{{ $product->product_image }}" class="rounded-3 mb-4 w-150px h-150px w-xxl-200px h-xxl-200px" height="70" width="50">--}}
+                                            <img src="{{ asset('images/backend') }}/iphone_15.png" class="rounded-3 mb-4" height="70" width="50">
+                                          <h5 class="card-title fw-bold text-gray-800 cursor-pointer text-hover-primary fs-3 fs-xl-1"><b>{{ $product->product_name }}</b></h5>
                                           @if($product->product_price > $product->final_price )
-                                          <p class="card-text"> <del>{{ $product->product_price }}</del> </p>
+                                          <p class="text-success text-center fw-bold fs-1"> <del>{{ $product->product_price }}</del> </p>
                                             @endif
-                                          <p class="card-text">{{ $product->final_price }}</p>
-                                         
+                                          <p class="text-success text-center fw-bold fs-1">{{ $product->final_price }}</p>
+
                                         </div>
                                     </div>
                                 </div>
                                 @endforeach
-                             
-                             
                             </div>
                           
                         </div>
+
+
                         <div class="col-4">
-                                <table class="table">
-                                    @if (session()->has('error'))
-                                    <div class="alert alert-success">
-                                        {{ session('error') }}
-                                    </div>
-                                @endif
-                                    <thead>
-                                        <th>
+                           <div class="card">
+                               <div class="card-body">
+                                   <table class="table">
+                                       @if (session()->has('error'))
+                                           <div class="alert alert-success">
+                                               {{ session('error') }}
+                                           </div>
+                                       @endif
+                                       <thead>
+                                       <th>
                                            Product Name
-                                        </th>
-                                        <th>
-                                          Quantity
-                                        </th>
-                                        <th>Sub Total</th>
-                                    </thead>
+                                       </th>
+                                       <th>
+                                           Quantity
+                                       </th>
+                                       <th>Sub Total</th>
+                                       </thead>
 
-                                    <tbody>
-                                        @foreach (Cart::content() as $row)
-                                        <tr>
-                                            <td>{{ $row->name }}</td>
-                                            <td>
+                                       <tbody>
+                                       @foreach (Cart::content() as $row)
+                                           <tr>
+                                               <td>{{ $row->name }}</td>
+                                               <td>
 
-                                                    <i class="ki-duotone ki-plus-square" wire:click="qtyPlus('{{ $row->rowId }}')">
-                                                    <span class="path1"></span>
-                                                    <span class="path2"></span>
-                                                    <span class="path3"></span>
-                                                    </i>
+                                                   <i class="ki-duotone ki-plus-square" wire:click="qtyPlus('{{ $row->rowId }}')">
+                                                       <span class="path1"></span>
+                                                       <span class="path2"></span>
+                                                       <span class="path3"></span>
+                                                   </i>
 
-                                              {{ $row->qty}}
-                                              <i class="ki-duotone ki-minus-square" wire:click="qtyMinus('{{ $row->rowId }}')">
-                                                <span class="path1"></span>
-                                                <span class="path2"></span>
-                                                </i>
-                                            </td>
-                                            <td>{{ $row->price * $row->qty }}</td>
+                                                   {{ $row->qty}}
+                                                   <i class="ki-duotone ki-minus-square" wire:click="qtyMinus('{{ $row->rowId }}')">
+                                                       <span class="path1"></span>
+                                                       <span class="path2"></span>
+                                                   </i>
+                                               </td>
+                                               <td>{{ $row->price * $row->qty }}</td>
 
-                                            <td>
+                                               <td>
 
-                                                <a href="#" wire:click.prevent="removeCartItem('{{$row->rowId}}')">
-                                                    <i class="ki-duotone ki-trash">
-                         <span class="path1"></span>
-                         <span class="path2"></span>
-                         <span class="path3"></span>
-                         <span class="path4"></span>
-                         <span class="path5"></span>
-                        </i>
-                                                </a>
-                                            </td>
-                                        </tr>
-                                        @endforeach
-                                    </tbody>
-
-
-
-                                </table>
-
-                                <table class="table">
-                                    <tr>
-                                        <td></td>
-                                        <td></td>
-                                        <td  style="text-align:right">
-                                            Sub Total
-                                        </td>
-                                        <td>
-                                            ({{Cart::content()->count(); }})
-                                        </td>
-
-                                        <td>
-                                            <input type="text"  readonly class="form-control" value="{{ Cart::total() }}">
-
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td></td>
-                                        <td></td>
-                                        <td  style="text-align:right">
-
-                                           <button wire:click="create" type="button" class="btn btn-primary btn-sm" >
-                                           Apply Voucher
-                                          </button>
-                                        </td>
-                                        <td>
-
-                                        </td>
-
-                                        <td>
-                                           <input type="text"  class="form-control" name="couponAmount" wire:model="" value="{{ $couponAmount ?? 0 }}" >
-                                           <input type="hidden"  class="form-control" name="couponCode" wire:model="coupon_code_code" value="{{ $couponCode ?? '' }}" >
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td></td>
-                                        <td></td>
-                                        <td  style="text-align:right">
-                                           Total
-                                        </td>
-                                        <td>
-
-                                        </td>
-
-
-                                        <td>
-                                           <input type="text" name="total" value="{{ number_format((str_replace(',', '', Cart::total()) - $couponAmount),2)}}" class="form-control">
-                                           {{-- <input type="text" name="total" value="" class="form-control"> --}}
-                                        </td>
-                                    </tr>
+                                                   <a href="#" wire:click.prevent="removeCartItem('{{$row->rowId}}')">
+                                                       <i class="ki-duotone ki-trash">
+                                                           <span class="path1"></span>
+                                                           <span class="path2"></span>
+                                                           <span class="path3"></span>
+                                                           <span class="path4"></span>
+                                                           <span class="path5"></span>
+                                                       </i>
+                                                   </a>
+                                               </td>
+                                           </tr>
+                                       @endforeach
+                                       </tbody>
 
 
 
+                                   </table>
+
+                                   <table class="table">
+                                       <tr>
+                                           <td></td>
+                                           <td></td>
+                                           <td  style="text-align:right">
+                                               Sub Total
+                                           </td>
+                                           <td>
+                                               ({{Cart::content()->count(); }})
+                                           </td>
+
+                                           <td>
+                                               <input type="text"  readonly class="form-control" value="{{ Cart::total() }}">
+
+                                           </td>
+                                       </tr>
+                                       <tr>
+                                           <td></td>
+                                           <td></td>
+                                           <td  style="text-align:right">
+
+                                               <button wire:click="create" type="button" class="btn btn-primary btn-sm" >
+                                                   Apply Voucher
+                                               </button>
+                                           </td>
+                                           <td>
+
+                                           </td>
+
+                                           <td>
+                                               <input type="text"  class="form-control" name="couponAmount" wire:model="" value="{{ $couponAmount ?? 0 }}" >
+                                               <input type="hidden"  class="form-control" name="couponCode" wire:model="coupon_code_code" value="{{ $couponCode ?? '' }}" >
+                                           </td>
+                                       </tr>
+                                       <tr>
+                                           <td></td>
+                                           <td></td>
+                                           <td  style="text-align:right">
+                                               Total
+                                           </td>
+                                           <td>
+
+                                           </td>
 
 
-
-                                </table>
-                                <div class="mb-3">
-                                    <label for="exampleInputEmail1" class="form-label">Billing Address </label>
-
-                                  </div>
-                                <div class="mb-3">
-                                    <label for="fname"><i class="fa fa-user"></i> Full Name</label>
-                                    <input type="text" class="form-control" name="name" placeholder="John M. Doe" required>
-                                  </div>
-                                  <div class="mb-3">
-                                    <label for="email"><i class="fa fa-envelope"></i> Phone</label>
-                                        <input type="text" class="form-control" name="mobile" placeholder="john@example.com" required>
-
-                                  </div>
-                                  <div class="mb-3">
-                                    <label for="email"><i class="fa fa-envelope"></i> Email</label>
-                                        <input type="text" class="form-control" name="email" placeholder="john@example.com" required>
-
-                                  </div>
-                                  <div class="mb-3">
-                                    <label for="email"><i class="fa fa-envelope"></i>Country</label>
-                                        <input type="text" class="form-control" name="country" placeholder="Dhaka" required>
-
-                                  </div>
-                                  <div class="mb-3">
-                                    <label for="email"><i class="fa fa-envelope"></i>State</label>
-                                        <input type="text" class="form-control" name="state" placeholder="Dhaka" required>
-
-                                  </div>
-                                  <div class="mb-3">
-                                    <label for="email"><i class="fa fa-envelope"></i> City</label>
-                                        <input type="text" class="form-control" name="city" placeholder="Gazipur" required>
-
-                                  </div>
-
-                                  <div class="mb-3">
-                                    <label for="adr"><i class="fa fa-address-card-o"></i> Address</label>
-                                    <input type="text" class="form-control" name="address" placeholder="542 W. 15th Street" required>
-
-                                  </div>
-                                  <div class="mb-3">
-                                    <label for="email"><i class="fa fa-envelope"></i> Zip Ccode</label>
-                                        <input type="text" class="form-control" name="zip_code" placeholder="Gazipur">
-
-                                  </div>
-
-                                  <div class="mb-3">
-                                    <label>
-                                        <input type="checkbox" checked="checked" name="sameadr" value=""> Shipping address same as billing
-                                      </label>
-
-
-
-                                  </div>
-                                  <div class="mb-3">
-                                    <button type="submit" class="btn btn-primary">Save</button>
-
-
-
-                                  </div>
+                                           <td>
+                                               <input type="text" name="total" value="{{ number_format((str_replace(',', '', Cart::total()) - $couponAmount),2)}}" class="form-control">
+                                               {{-- <input type="text" name="total" value="" class="form-control"> --}}
+                                           </td>
+                                       </tr>
 
 
 
 
 
+
+                                   </table>
+                                   <div class="mb-3">
+                                       <label for="exampleInputEmail1" class="form-label">Billing Address </label>
+
+                                   </div>
+                                   <div class="mb-3">
+                                       <label for="fname"><i class="fa fa-user"></i> Full Name</label>
+                                       <input type="text" class="form-control" name="name" placeholder="John M. Doe" required>
+                                   </div>
+                                   <div class="mb-3">
+                                       <label for="email"><i class="fa fa-envelope"></i> Phone</label>
+                                       <input type="text" class="form-control" name="mobile" placeholder="john@example.com" required>
+
+                                   </div>
+                                   <div class="mb-3">
+                                       <label for="email"><i class="fa fa-envelope"></i> Email</label>
+                                       <input type="text" class="form-control" name="email" placeholder="john@example.com" required>
+
+                                   </div>
+                                   <div class="mb-3">
+                                       <label for="email"><i class="fa fa-envelope"></i>Country</label>
+                                       <input type="text" class="form-control" name="country" placeholder="Dhaka" required>
+
+                                   </div>
+                                   <div class="mb-3">
+                                       <label for="email"><i class="fa fa-envelope"></i>State</label>
+                                       <input type="text" class="form-control" name="state" placeholder="Dhaka" required>
+
+                                   </div>
+                                   <div class="mb-3">
+                                       <label for="email"><i class="fa fa-envelope"></i> City</label>
+                                       <input type="text" class="form-control" name="city" placeholder="Gazipur" required>
+
+                                   </div>
+
+                                   <div class="mb-3">
+                                       <label for="adr"><i class="fa fa-address-card-o"></i> Address</label>
+                                       <input type="text" class="form-control" name="address" placeholder="542 W. 15th Street" required>
+
+                                   </div>
+                                   <div class="mb-3">
+                                       <label for="email"><i class="fa fa-envelope"></i> Zip Ccode</label>
+                                       <input type="text" class="form-control" name="zip_code" placeholder="Gazipur">
+
+                                   </div>
+
+                                   <div class="mb-3">
+                                       <label>
+                                           <input type="checkbox" checked="checked" name="sameadr" value=""> Shipping address same as billing
+                                       </label>
+                                   </div>
+                                   <div class="mb-3">
+                                       <button type="submit" class="btn btn-primary">Save</button>
+                                   </div>
+                               </div>
+                           </div>
                         </div>
-
                        
                 
                     </div>

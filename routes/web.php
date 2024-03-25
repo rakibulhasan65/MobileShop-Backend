@@ -10,7 +10,7 @@ use \App\Http\Controllers\Backend\CustomersController;
 use \App\Http\Controllers\Backend\ProductsInvoiceController;
 use \App\Http\Controllers\Backend\ReportsController;
 use \App\Http\Controllers\Backend\SubscriptionController;
-
+use \App\Http\Controllers\Backend\OrdersControllers;
 Route::get('/cache', function () {
     Artisan::call('cache:clear');
     Artisan::call('config:clear');
@@ -76,6 +76,10 @@ Route::prefix('reports')->group(function () {
 
     // Shipping
     Route::get('/shipping', [ReportsController::class, 'shipping'])->name('reports.shipping');
+});
+
+Route::prefix('orders')->group(function () {
+    Route::get('/orders-listing', [OrdersControllers::class, 'ordersListing'])->name('orders.listing');
 });
 
 Route::prefix('subscription')->group(function () {

@@ -47,6 +47,7 @@ class ProductsController extends Controller
             $manager = new ImageManager(new Driver());
 
             Log::info($request);
+
 //            return response()->json($request);
 
 //            $validatedData = $request->validate([
@@ -94,10 +95,9 @@ class ProductsController extends Controller
                 $products_upload = $request->product_image;
                 $imageName = time() . '.' . $products_upload->getClientOriginalExtension();
                 $image = $manager->read($request->file('product_image'));
-                $image->toWebp(480, 480)->save(public_path('images/backend/products/' . $imageName));
+                $image->toWebp(480, 480)->save(public_path('images/backend/' . $imageName));
                 $products->product_image = $imageName;
             }
-
 
             $products->product_descriptions = $request->product_descriptions;
             $products->meta_title = $request->meta_title;
@@ -106,64 +106,6 @@ class ProductsController extends Controller
 
             $products->stock = $request->quantity;
             $products->status = $request->status;
-
-
-            //   SummerNote Products Description
-//            $productsDescription = $request->add_product_description;
-//            if ($productsDescription) {
-//                $dom = new DOMDocument();
-//                $dom->loadHTML($productsDescription, 9);
-//                $images = $dom->getElementsByTagName('img');
-//                foreach ($images as $key => $img) {
-//                    $imgAttribute = $img->getAttribute('img');
-//                    if ($imgAttribute) {
-//                        $imgParts = explode(';', $imgAttribute);
-//                        if (isset($imgParts[1])) {
-//                            $base64Data = explode(',', $imgParts[1]);
-//                            if (isset($base64Data[1])) {
-//                                $data = base64_decode($base64Data[1]);
-//                                $image_name = "/uploads/products-description/" . time() . $key . 'png';
-//                                file_put_contents(public_path() . $image_name, $data);
-//                                $img->removeAttribute('src');
-//                                $img->setAttribute('src', $image_name);
-//                            }
-//                        }
-//                    }
-//                }
-//                $productsDescription = $dom->saveHTML();
-//
-//                $products->product_descriptions = $productsDescription;
-//                $products->save();
-//            }
-
-
-            //   SummerNote Meta Description
-//            $meta_descriptions = $request->add_product_meta_description;
-//            if ($meta_descriptions) {
-//                $dom = new DOMDocument();
-//                $dom->loadHTML($meta_descriptions, 9);
-//                $images = $dom->getElementsByTagName('img');
-//                foreach ($images as $key => $img) {
-//                    $imgAttribute = $img->getAttribute('img');
-//                    if ($imgAttribute) {
-//                        $imgParts = explode(';', $imgAttribute);
-//                        if (isset($imgParts[1])) {
-//                            $base64Data = explode(',', $imgParts[1]);
-//                            if (isset($base64Data[1])) {
-//                                $data = base64_decode($base64Data[1]);
-//                                $image_name = "/uploads/meta-description/" . time() . $key . 'png';
-//                                file_put_contents(public_path() . $image_name, $data);
-//                                $img->removeAttribute('src');
-//                                $img->setAttribute('src', $image_name);
-//                            }
-//                        }
-//                    }
-//                }
-//                $metaDescription = $dom->saveHTML();
-//
-//                $products->meta_descriptions = $metaDescription;
-//                $products->save();
-//            }
 
             $products->save();
 
@@ -185,11 +127,10 @@ class ProductsController extends Controller
                 $dataStorage = $request->file('productsGallery');
                 foreach ($dataStorage as $galleryImage) {
                     $product_image = new ProductImage();
-
                     $products_upload = $galleryImage;
                     $imageName = time() . '.' . $products_upload->getClientOriginalExtension();
                     $image = $manager->read($products_upload);
-                    $image->toWebp(480, 480)->save(public_path('images/backend/products/' . $imageName));
+                    $image->toWebp(480, 480)->save(public_path('images/backend/' . $imageName));
 
                     $product_image->product_id = $lastInsertedProductId;
                     $product_image->product_image = $imageName;
@@ -241,11 +182,11 @@ class ProductsController extends Controller
         $imagePath = 'images/backend/' . $deleteFindId->product_image;
         if ($deleteFindId) {
             $deleteFindId->delete();
-          if(is_file($imagePath)){
-              if (Storage::disk('public')->exists($imagePath)) {
-                  Storage::disk('public')->delete($imagePath);
-              }
-          }
+            if (is_file($imagePath)) {
+                if (Storage::disk('public')->exists($imagePath)) {
+                    Storage::disk('public')->delete($imagePath);
+                }
+            }
             return response()->json(['status' => 200]);
         } else {
             return response()->json(['status' => 404, 'message' => 'Category not found'], 404);
@@ -259,7 +200,7 @@ class ProductsController extends Controller
         $route = route('products.index');
 
         foreach ($request->ids as $id) {
-            $deleteItem = Product::find( $id);
+            $deleteItem = Product::find($id);
 
             if ($deleteItem) {
                 $deleteItem->delete();
