@@ -173,9 +173,9 @@
             </div>
             <!--end::Toolbar-->
             <!--begin::Content-->
-            <div id="kt_app_content" class="app-content flex-column-fluid">
+            <div  class="app-content flex-column-fluid">
                 <!--begin::Content container-->
-                <div id="kt_app_content_container" class="app-container container-xxl">
+                <div  class="app-container container-xxl">
                     <!--begin::Products-->
                     <div class="card card-flush">
                         <!--begin::Card header-->
@@ -221,7 +221,7 @@
                         <div class="card-body pt-0">
                             <!--begin::Table-->
                             <table class="table align-middle table-row-dashed fs-6 gy-5"
-                                   id="kt_ecommerce_products_table">
+                                   >
                                 <thead>
                                 <tr class="text-start text-gray-500 fw-bold fs-7 text-uppercase gs-0">
                                     <th class="w-10px pe-2">

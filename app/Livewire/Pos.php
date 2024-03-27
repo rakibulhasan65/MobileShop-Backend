@@ -59,6 +59,7 @@ class Pos extends Component
 
     public function addCart($id)
     {
+        
         $product = Product::findorfail($id);
        
 

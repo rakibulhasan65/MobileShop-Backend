@@ -674,7 +674,7 @@
                                                         <span class="fw-bold fs-4 mt-1 ms-2">%</span>
 
                                                         <input type="range" class="form-range" id="productDiscount"
-                                                               name="product_discount" max="100"/>
+                                                               name="product_discount_percent" max="100"/>
 
                                                     </div>
                                                     <!--end::Slider-->
@@ -694,7 +694,7 @@
                                                     <label class="form-label">Fixed Discounted Price</label>
                                                     <!--end::Label-->
                                                     <!--begin::Input-->
-                                                    <input type="number" name="product_discount" class="form-control mb-2"
+                                                    <input type="text" name="product_discount" class="form-control mb-2"
                                                            placeholder="Discounted price"/>
                                                     <!--end::Input-->
                                                     <!--begin::Description-->
