@@ -176,12 +176,12 @@
                 <div id="kt_app_content_container" class="app-container container-xxl">
 
 
-
                 @if ($errors->any())
                     <!--begin::Alert-->
                         <div class="alert alert-primary d-flex align-items-center p-5">
                             <!--begin::Icon-->
-                            <i class="ki-duotone ki-shield-tick fs-2hx text-success me-4"><span class="path1"></span><span class="path2"></span></i>
+                            <i class="ki-duotone ki-shield-tick fs-2hx text-success me-4"><span
+                                        class="path1"></span><span class="path2"></span></i>
                             <!--end::Icon-->
 
                             <!--begin::Wrapper-->
@@ -204,7 +204,7 @@
 
                 <!--begin::Form-->
                     <form id="add_product_form" action="{{route('products.store')}}" method="POST"
-                          class="form d-flex flex-column flex-lg-row" data-kt-redirect="">
+                          class="form d-flex flex-column flex-lg-row" data-kt-redirect="" enctype="multipart/form-data">
                     @csrf
                     <!--begin::Aside column-->
                         <div class="d-flex flex-column gap-7 gap-lg-10 w-100 w-lg-300px mb-7 me-lg-10">
@@ -230,6 +230,18 @@
                                         [data-bs-theme="dark"] .image-input-placeholder {
                                             background-image: url('assets/media/svg/files/blank-image-dark.svg');
                                         }</style>
+
+
+                                    @if($products->product_image)
+                                        <style>.image-input-placeholder {
+                                                background-image: url('{{asset('images/backend/')}}/{{$products->product_image}}');
+                                            }
+
+                                            [data-bs-theme="dark"] .image-input-placeholder {
+                                                background-image: url('{{asset('images/backend/')}}/{{$products->product_image}}');
+                                            }</style>
+                                    @endif
+
                                     <!--end::Image input placeholder-->
                                     <div class="image-input image-input-empty image-input-outline image-input-placeholder mb-3"
                                          data-kt-image-input="true">
@@ -245,7 +257,7 @@
                                                 <span class="path2"></span>
                                             </i>
                                             <!--begin::Inputs-->
-                                            <input type="file" name="product_image" accept=".png, .jpg, .jpeg"/>
+                                            <input type="file" name="product_image">
                                             <input type="hidden" name="avatar_remove"/>
                                             <!--end::Inputs-->
                                         </label>
@@ -303,7 +315,7 @@
                                     <!--begin::Select2-->
                                     <select class="form-select mb-2" data-control="select2" data-hide-search="true"
                                             data-placeholder="Select an option" id="add_product_status" name="status">
-                                        <option></option>
+                                        <option value="{{$products->status}}">{{$products->status}}</option>
                                         <option value="1" selected="selected">Published</option>
                                         <option value="2">Draft</option>
                                         <option value="3">Inactive</option>
@@ -341,9 +353,8 @@
                                     <!--end::Label-->
                                     <!--begin::Select2-->
                                     <select name="categories" class="form-select mb-2" data-control="select2"
-                                            data-placeholder="Select an option"
-                                    >
-                                        <option></option>
+                                            data-placeholder="Select an option">
+                                        <option value="{{$products->category_id}}" selected>{{$findCategory->category_name}}</option>
                                         @foreach($category as $data)
                                             <option value="{{$data->id}}">{{$data->category_name}}</option>
                                         @endforeach
@@ -354,7 +365,7 @@
                                     <!--end::Description-->
                                     <!--end::Input group-->
                                     <!--begin::Button-->
-                                    <a href="{{route('brands.create')}}" class="btn btn-light-primary btn-sm mb-10">
+                                    <a href="{{route('categories.create')}}" class="btn btn-light-primary btn-sm mb-10">
                                         <i class="ki-duotone ki-plus fs-2"></i>Create new category</a>
                                     <!--end::Button-->
                                     <!--begin::Input group-->
@@ -363,9 +374,8 @@
                                     <!--end::Label-->
                                     <!--begin::Select2-->
                                     <select name="brands" class="form-select mb-2" data-control="select2"
-                                            data-placeholder="Select an option"
-                                    >
-                                        <option></option>
+                                            data-placeholder="Select an option">
+                                        <option value="{{$products->brand_id}}" selected>{{$findBrand->brand_name}}</option>
                                         @foreach($brands as $data)
                                             <option value="{{$data->id}}">{{$data->brand_name}}</option>
                                         @endforeach
@@ -387,9 +397,8 @@
                                     <!--end::Label-->
                                     <!--begin::Select2-->
                                     <select name="colors" class="form-select mb-2" data-control="select2"
-                                            data-placeholder="Select an option"
-                                    >
-                                        <option></option>
+                                            data-placeholder="Select an option">
+                                        <option value="{{$products->color_id}}" selected>{{$findColor->color_name}}</option>
                                         @foreach($colors as $data)
                                             <option value="{{$data->id}}">{{$data->color_name}}</option>
                                         @endforeach
@@ -454,7 +463,7 @@
                                                     <!--end::Label-->
                                                     <!--begin::Input-->
                                                     <input type="text" name="product_name" class="form-control mb-2"
-                                                           placeholder="Product name" value=""/>
+                                                           placeholder="Product name" value="{{$products->product_name}}"/>
                                                     <!--end::Input-->
                                                     <!--begin::Description-->
                                                     <div class="text-muted fs-7">A product name is required and
@@ -472,16 +481,12 @@
                                                 {{--                                                    <div id="kt_ecommerce_add_product_description"--}}
                                                 {{--                                                         name="add_product_description" class="min-h-200px mb-2"></div>--}}
                                                 <!--end::Editor-->
-
-
                                                     <!--begin::basic autosize textarea-->
-
                                                     <label for="" class="form-label">Products Description</label>
-                                                    <textarea class="form-control" data-kt-autosize="true" name="product_descriptions"></textarea>
+                                                    <textarea class="form-control" id="product_descriptions" data-kt-autosize="true"
+                                                              name="product_descriptions">{{$products->product_descriptions}}</textarea>
 
                                                     <!--end::basic autosize textarea-->
-
-
 
                                                     <!--begin::Description-->
                                                     <div class="text-muted fs-7">Set a description to the product for
@@ -508,33 +513,32 @@
                                                 <!--begin::Input group-->
                                                 <div class="fv-row mb-2">
                                                     <!--begin::Dropzone-->
-                                                    <div class="dropzone" id="kt_ecommerce_add_product_media">
-                                                        <!--begin::Message-->
-                                                        <div class="dz-message needsclick">
-                                                            <!--begin::Icon-->
-                                                            <i class="ki-duotone ki-file-up text-primary fs-3x">
-                                                                <span class="path1"></span>
-                                                                <span class="path2"></span>
-                                                            </i>
-                                                            <!--end::Icon-->
-                                                            <!--begin::Info-->
-                                                        {{--                                                            <div class="ms-4">--}}
-                                                        {{--                                                                <h3 class="fs-5 fw-bold text-gray-900 mb-1">Drop files--}}
-                                                        {{--                                                                    here or click to upload.</h3>--}}
-                                                        {{--                                                                <span class="fs-7 fw-semibold text-gray-500">Upload up to 10 files</span>--}}
-                                                        {{--                                                            </div>--}}
-                                                        <!--end::Info-->
-
-                                                            <div class="form-group">
-                                                                <input type="file" name="productsGallery" class="form-control">
-                                                            </div>
+                                                {{--                                                    <div class="dropzone" id="kt_ecommerce_add_product_media">--}}
+                                                {{--                                                        <!--begin::Message-->--}}
+                                                {{--                                                        <div class="dz-message needsclick">--}}
+                                                {{--                                                            <!--begin::Icon-->--}}
+                                                {{--                                                            <i class="ki-duotone ki-file-up text-primary fs-3x">--}}
+                                                {{--                                                                <span class="path1"></span>--}}
+                                                {{--                                                                <span class="path2"></span>--}}
+                                                {{--                                                            </i>--}}
+                                                {{--                                                            <!--end::Icon-->--}}
+                                                {{--                                                            <!--begin::Info-->--}}
+                                                {{--                                                            <div class="ms-4">--}}
+                                                {{--                                                                <h3 class="fs-5 fw-bold text-gray-900 mb-1">Drop files--}}
+                                                {{--                                                                    here or click to upload.</h3>--}}
+                                                {{--                                                                <span class="fs-7 fw-semibold text-gray-500">Upload up to 10 files</span>--}}
+                                                {{--                                                            </div>--}}
+                                                {{--                                                            <!--end::Info-->--}}
 
 
+                                                {{--                                                        </div>--}}
+                                                {{--                                                    </div>--}}
+                                                <!--end::Dropzone-->
 
-
-                                                        </div>
+                                                    <div class="form-group" id="kt_ecommerce_add_product_media">
+                                                        <input type="file" name="productsGallery[]" class="form-control"
+                                                               multiple>
                                                     </div>
-                                                    <!--end::Dropzone-->
                                                 </div>
                                                 <!--end::Input group-->
                                                 <!--begin::Description-->
@@ -562,7 +566,7 @@
                                                     <!--end::Label-->
                                                     <!--begin::Input-->
                                                     <input type="text" name="product_price" class="form-control mb-2"
-                                                           placeholder="Product price" value=""/>
+                                                           placeholder="Product price" value="{{$products->product_price}}"/>
                                                     <!--end::Input-->
                                                     <!--begin::Description-->
                                                     <div class="text-muted fs-7">Set the product price.</div>
@@ -664,7 +668,8 @@
                                                     <!--end::Label-->
                                                     <!--begin::Slider-->
                                                     <div class="d-flex flex-column text-center mb-5">
-                                                        <div class="d-flex align-items-start justify-content-center mb-7" style="display: none !important;">
+                                                        <div class="d-flex align-items-start justify-content-center mb-7"
+                                                             style="display: none !important;">
                                                             <span class="fw-bold fs-3x"
                                                                   id="kt_ecommerce_add_product_discount_label">0</span>
                                                             <span class="fw-bold fs-4 mt-1 ms-2">%</span>
@@ -674,14 +679,14 @@
                                                              class="noUi-sm" style="display: none !important;"></div>
 
                                                         <span class="fw-bold fs-3x"
-                                                              id="productDiscountValue">0</span>
+                                                              id="productDiscountValue">@if($products->discount_option == '2') {{$products->product_discount}} @else 0 @endif</span>
                                                         <span class="fw-bold fs-4 mt-1 ms-2">%</span>
 
-                                                        <input type="range" class="form-range" id="productDiscount" name="product_discount" max="100" />
+                                                        <input type="range" class="form-range" id="productDiscount"
+                                                               name="product_discount_percent" max="100"/>
 
                                                     </div>
                                                     <!--end::Slider-->
-
 
 
                                                     <!--begin::Description-->
@@ -699,7 +704,7 @@
                                                     <!--end::Label-->
                                                     <!--begin::Input-->
                                                     <input type="text" name="product_discount" class="form-control mb-2"
-                                                           placeholder="Discounted price"/>
+                                                           placeholder="Discounted price" value="@if($products->discount_option == '3') {{$products->product_discount}} @endif"/>
                                                     <!--end::Input-->
                                                     <!--begin::Description-->
                                                     <div class="text-muted fs-7">Set the discounted product price. The
@@ -737,7 +742,7 @@
                                                     <!--end::Label-->
                                                     <!--begin::Input-->
                                                     <input type="text" name="sku" class="form-control mb-2"
-                                                           placeholder="SKU Number" value=""/>
+                                                           placeholder="SKU Number" value="{{$products->sku}}"/>
                                                     <!--end::Input-->
                                                     <!--begin::Description-->
                                                     <div class="text-muted fs-7">Enter the product SKU.</div>
@@ -769,7 +774,7 @@
                                                     <!--begin::Input-->
                                                     <div class="d-flex gap-3">
                                                         <input type="number" name="quantity" class="form-control mb-2"
-                                                               placeholder="quantity" value=""/>
+                                                               placeholder="quantity" value="{{$products->quantity}}"/>
                                                     </div>
                                                     <!--end::Input-->
                                                     <!--begin::Description-->
@@ -815,29 +820,32 @@
                                                                                 data-kt-ecommerce-catalog-add-product="product_option">
                                                                             <option></option>
                                                                             <option value="color">Color</option>
-                                                                            <option value="size">Size</option>
-                                                                            <option value="material">Material</option>
-                                                                            <option value="style">Style</option>
+                                                                            <option value="size">Country</option>
+                                                                            <option value="material">Storage</option>
+                                                                            <option value="style">Region</option>
                                                                         </select>
                                                                     </div>
                                                                     <!--end::Select2-->
                                                                     <!--begin::Input-->
                                                                     <input type="text"
-                                                                           class="form-control mw-100 w-200px" style="width: 180px !important;"
+                                                                           class="form-control mw-100 w-200px"
+                                                                           style="width: 180px !important;"
                                                                            name="product_option_name"
                                                                            placeholder="Variation name"/>
                                                                     <!--end::Input-->
 
                                                                     <!--begin::Input-->
                                                                     <input type="text"
-                                                                           class="form-control mw-100 w-200px" style="width: 180px !important;"
+                                                                           class="form-control mw-100 w-200px"
+                                                                           style="width: 180px !important;"
                                                                            name="product_option_price"
                                                                            placeholder="Variation price"/>
                                                                     <!--end::Input-->
 
                                                                     <!--begin::Input-->
                                                                     <input type="text"
-                                                                           class="form-control mw-100 w-200px" style="width: 180px !important;"
+                                                                           class="form-control mw-100 w-200px"
+                                                                           style="width: 180px !important;"
                                                                            name="product_option_stock"
                                                                            placeholder="Variation stock"/>
                                                                     <!--end::Input-->
@@ -915,11 +923,11 @@
                                                 <!--end::Description-->
 
 
-
                                                     <!--begin::basic autosize textarea-->
 
                                                     <label for="" class="form-label">Meta Tag Description</label>
-                                                    <textarea class="form-control" data-kt-autosize="true" name="meta_descriptions"></textarea>
+                                                    <textarea class="form-control" data-kt-autosize="true"
+                                                              name="meta_descriptions"></textarea>
 
                                                     <!--end::basic autosize textarea-->
 
@@ -1014,6 +1022,25 @@
 
 @push('js')
 
+
+    <!-- Place the first <script> tag in your HTML's <head> -->
+    <script src="https://cdn.tiny.cloud/1/024cqmujmkpznia854jre47l3pclhgefbig9kozhg5yw021a/tinymce/7/tinymce.min.js" referrerpolicy="origin"></script>
+
+    <!-- Place the following <script> and <textarea> tags your HTML's <body> -->
+    <script>
+        tinymce.init({
+            selector: '#product_descriptions',
+            plugins: 'anchor autolink charmap codesample emoticons image link lists media searchreplace table visualblocks wordcount checklist mediaembed casechange export formatpainter pageembed linkchecker a11ychecker tinymcespellchecker permanentpen powerpaste advtable advcode editimage advtemplate ai mentions tinycomments tableofcontents footnotes mergetags autocorrect typography inlinecss markdown',
+            toolbar: 'undo redo | blocks fontfamily fontsize | bold italic underline strikethrough | link image media table mergetags | addcomment showcomments | spellcheckdialog a11ycheck typography | align lineheight | checklist numlist bullist indent outdent | emoticons charmap | removeformat',
+            tinycomments_mode: 'embedded',
+            tinycomments_author: 'Author name',
+            mergetags_list: [
+                { value: 'First.Name', title: 'First Name' },
+                { value: 'Email', title: 'Email' },
+            ],
+            ai_request: (request, respondWith) => respondWith.string(() => Promise.reject("See docs to implement AI Assistant")),
+        });
+    </script>
 
 
     <script>

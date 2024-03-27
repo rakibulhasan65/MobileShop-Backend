@@ -51,24 +51,24 @@ class ProductsController extends Controller
             Log::info($request);
 //            return response()->json($request);
 
-//            $validatedData = $request->validate([
-//                'categories' => 'required|integer',
-//                'brands' => 'required|integer',
-//                'colors' => 'required|integer',
-//                'product_name' => 'required|string',
-//                'product_price' => 'required|numeric',
-//                'discount_option' => 'required|in:1,2,3',
-//                'discounted_price' => 'required_if:discount_option,2,3|numeric',
-//                'sku' => 'required|string',
-//                'quantity' => 'required|integer',
-//                'kt_ecommerce_add_product_options.*.product_option' => 'required|string',
-//                'kt_ecommerce_add_product_options.*.product_option_name' => 'required|string',
-//                'kt_ecommerce_add_product_options.*.product_option_price' => 'required|numeric',
-//                'kt_ecommerce_add_product_options.*.product_option_stock' => 'required|integer',
-//                'meta_title' => 'required|string',
-//                'add_product_meta_keywords' => 'nullable|string',
-//                'product_image' => 'nullable|image',
-//            ]);
+            $validatedData = $request->validate([
+                'categories' => 'required|integer',
+                'brands' => 'required|integer',
+                'colors' => 'required|integer',
+                'product_name' => 'required|string',
+                'product_price' => 'required|numeric',
+                'discount_option' => 'required|in:1,2,3',
+                'discounted_price' => 'required_if:discount_option,2,3|numeric',
+                'sku' => 'required|string',
+                'quantity' => 'required|integer',
+                'kt_ecommerce_add_product_options.*.product_option' => 'required|string',
+                'kt_ecommerce_add_product_options.*.product_option_name' => 'required|string',
+                'kt_ecommerce_add_product_options.*.product_option_price' => 'required|numeric',
+                'kt_ecommerce_add_product_options.*.product_option_stock' => 'required|integer',
+                'meta_title' => 'required|string',
+                'add_product_meta_keywords' => 'nullable|string',
+                'product_image' => 'nullable|image',
+            ]);
 
         if ($request->discount_option == 1) {
                
@@ -218,10 +218,7 @@ class ProductsController extends Controller
      */
     public function show(string $id)
     {
-        $category = Category::all();
-        $brands = Brand::all();
-        $colors = Color::all();
-        return view('backend.products.edit', compact('category', 'brands', 'colors'));
+
     }
 
     /**
@@ -229,7 +226,16 @@ class ProductsController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        $category = Category::all();
+        $brands = Brand::all();
+        $colors = Color::all();
+        $products = Product::find($id);
+
+        $findCategory = Category::find($products->category_id);
+        $findBrand = Brand::find($products->brand_id);
+        $findColor = Color::find($products->color_id);
+
+        return view('backend.products.edit', compact('category', 'brands', 'colors','products','findCategory','findBrand','findColor'));
     }
 
     /**

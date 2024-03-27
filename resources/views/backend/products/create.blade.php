@@ -811,9 +811,9 @@
                                                                                 data-kt-ecommerce-catalog-add-product="product_option">
                                                                             <option></option>
                                                                             <option value="color">Color</option>
-                                                                            <option value="size">Size</option>
-                                                                            <option value="material">Material</option>
-                                                                            <option value="style">Style</option>
+                                                                            <option value="size">Country</option>
+                                                                            <option value="material">Storage</option>
+                                                                            <option value="style">Region</option>
                                                                         </select>
                                                                     </div>
                                                                     <!--end::Select2-->
